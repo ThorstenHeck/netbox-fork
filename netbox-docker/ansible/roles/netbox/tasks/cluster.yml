@@ -1,0 +1,280 @@
+---
+- name: get all interfaces assigned with an ipv4 address
+  set_fact:
+    mount: "{{ ansible_mounts | first }}"
+       
+    
+    
+
+- set_fact:
+    mount: "{{ ansible_mounts | first }}"
+- set_fact:
+    disk_total_s: "{{ (mount.size_total / 1000000000) | round(1, 'common') }}" 
+- set_fact:
+    vcpu_cores: "{{ ansible_facts['processor_vcpus'] }}" 
+- set_fact:
+    interfaces_list: "{{ ansible_facts | build_ipv4_from_facts }}"
+- set_fact:
+    primary_ip: "{{ ansible_facts['default_ipv4']['address']}}" 
+- set_fact:
+    platform: "{{ ansible_facts['lsb']['description']}}" 
+- set_fact:
+    name: "{{ inventory_hostname }}" 
+
+- name: vcpu cores output
+  debug:
+    msg: " {{ vcpu_cores }}"
+
+- name: interfaces_list output
+  debug:
+    msg: "{{ interfaces_list }}"
+
+- name: disk total output
+  debug:
+    msg: " {{ disk_total_s }}"
+
+- name: total memory output
+  debug:
+    msg: " {{ ansible_memtotal_mb }}"
+- name: primary IP output
+  debug:
+    msg: " {{ primary_ip }}"
+
+- name: platform output
+  debug:
+    msg: " {{ platform | makedict('platform') }} "
+
+- name: name output
+  debug:
+    msg: " {{ inventory_hostname }}"
+
+
+
+
+#       name: "{{ item.name }}"
+#       site: "{{ item.site }}"
+#       cluster: "{{ item.cluster }}"
+#       tenant: "{{ item.tenant }}"
+#       platform: "{{ item.platform }}"
+#       virtual_machine_role: "{{ item.virtual_machine_role }}"
+#       vcpus: "{{ item.vcpus }}"
+#       primary_ip4: "{{ item.primary_ip4 }}"
+#       memory: "{{ item.memory }}"
+#       disk: "{{ item.disk }}"
+
+
+# - name: "TASK 0: CREATE CLUSTER GROUP"
+#   netbox.netbox.netbox_cluster_group:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#     state: present
+#   loop: "{{ cluster_type }}"
+
+
+# - name: "TASK 1: CREATE CLUSTER TYPE"
+#   netbox.netbox.netbox_cluster_type:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#     state: present
+#   loop: "{{ cluster_type }}"
+
+
+# - name: "TASK 2.1: CREATE TENANT GROUP"
+#   netbox.netbox.netbox_tenant_group:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#     state: present
+#   loop: "{{ tenant_group }}"
+
+# - name: "TASK 2.2: CREATE TENANT"
+#   netbox.netbox.netbox_tenant:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       tenant_group: "{{ item.tenant_group }}"
+#     state: present
+#   loop: "{{ tenant }}"
+
+# - name: "TASK 2.3: CREATE REGION"
+#   netbox.netbox.netbox_region:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#     state: present
+#   loop: "{{ region }}"
+
+# - name: "TASK 2.4: CREATE SITE GROUP"
+#   netbox.netbox.netbox_site_group:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#     state: present
+#   loop: "{{ site_group }}"
+
+# - name: "TASK 2.5: CREATE SITE"
+#   netbox.netbox.netbox_site:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       site_group: "{{ item.site_group }}"
+#       region: "{{ item.region }}"
+#       tenant: "{{ item.tenant }}"
+#       time_zone: "{{ item.time_zone }}"
+#     state: present
+#   loop: "{{ site }}"
+
+# - name: "TASK 2.6: CREATE CLUSTER"
+#   netbox.netbox.netbox_cluster:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       cluster_type: "{{ item.cluster_type }}"
+#       cluster_group: "{{ item.cluster_group }}"
+#       tenant: "{{ item.tenant }}"
+#       site: "{{ item.site }}"
+#     state: present
+#   loop: "{{ cluster }}"
+
+# - name: "TASK 3.1: CREATE MANUFACTOR"
+#   netbox.netbox.netbox_manufacturer:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#   loop: "{{ manufacturer }}"
+
+# - name: "TASK 3.2: CREATE DEVICE TYPE"
+#   netbox.netbox.netbox_device_type:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       model: "{{ item.model }}"
+#       manufacturer: "{{ item.manufacturer }}"
+#       u_height: "{{ item.u_height }}"
+#       weight: "{{ item.weight }}"
+#       weight_unit: "{{ item.weight_unit }}"
+#       is_full_depth: "{{ item.is_full_depth }}"
+#   loop: "{{ device_type }}"
+
+# - name: "TASK 3.3: CREATE DEVICE ROLE"
+#   netbox.netbox.netbox_device_role:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       color: "{{ item.color }}"
+#       vm_role: "{{ item.vm_role }}"
+#   loop: "{{ device_roles }}"
+
+# - name: "TASK 3.4: CREATE PLATFORM"
+#   netbox.netbox.netbox_platform:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       slug: "{{ item.slug }}"
+#   loop: "{{ platforms }}"
+
+# - name: "TASK 3.5: CREATE DEVICE"
+#   netbox.netbox.netbox_device:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       device_type: "{{ item.device_type }}"
+#       device_role: "{{ item.device_role }}"
+#       tenant: "{{ item.tenant }}"
+#       platform: "{{ item.platform }}"
+#       site: "{{ item.site }}"
+#       cluster: "{{ item.cluster }}"
+#   loop: "{{ device }}"
+
+
+# - name: "TASK 4.1: CREATE VIRTUAL MACHINE"
+#   netbox.netbox.netbox_virtual_machine:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       site: "{{ item.site }}"
+#       cluster: "{{ item.cluster }}"
+#       tenant: "{{ item.tenant }}"
+#       platform: "{{ item.platform }}"
+#       virtual_machine_role: "{{ item.virtual_machine_role }}"
+#       vcpus: "{{ item.vcpus }}"
+#       primary_ip4: "{{ item.primary_ip4 }}"
+#       memory: "{{ item.memory }}"
+#       disk: "{{ item.disk }}"
+#   loop: "{{ virtual_machine }}"
+
+
+
+
+
+
+
+                    # virtual_machine=dict(required=False, type="raw"),
+                    # name=dict(required=True, type="str"),
+                    # enabled=dict(required=False, type="bool"),
+                    # mtu=dict(required=False, type="int"),
+                    # mac_address=dict(required=False, type="str"),
+                    # description=dict(required=False, type="str"),
+                    # mode=dict(required=False, type="raw"),
+                    # vm_bridge=dict(required=False, type="raw"),
+                    # parent_vm_interface=dict(required=False, type="raw"),
+                    # untagged_vlan=dict(required=False, type="raw"),
+                    # tagged_vlans=dict(required=False, type="raw"),
+                    # vrf=dict(required=False, type="raw"),
+                    # tags=dict(required=False, type="list", elements="raw"),
+                    # custom_fields=dict(required=False, type="dict"),
+
+# - name: "TASK 4: SYS >> Create interfaces"
+#   netbox.netbox.netbox_vm_interface:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       virtual_machine: "{{ item.name }}"
+#       name: eth0
+#     state: present
+#   loop: "{{ vms }}"
+
+# - name: "TASK 5: SYS >> ASSIGN IP TO VM"
+#   debug:
+#     msg: "{{ netbox_headers }}"
+
+
+# - name: "TASK 5: SYS >> ASSIGN IP TO VM"
+#   uri:
+#     url: "http://65.21.252.14:8000/api/ipam/ip-addresses/"
+#     method: POST
+#     headers: "{{ netbox_headers }}"
+#     status_code: 201
+#     body_format: json
+#     body: {
+#       "address": "{{ item.address }}",
+#       "status": 1,
+#       "interface": "{{ item.name | get_interface_id(netbox_headers) }}"
+#     }
+#   loop: "{{ vms }}"
+
+# - name: "TASK 6: SYS >> ASSIGN PRIMARY ADDRESS TO THE DEVICE"
+#   netbox.netbox.netbox_virtual_machine:
+#     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+#     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+#     data:
+#       name: "{{ item.name }}"
+#       cluster: JoshV_Cluster1
+#       primary_ip4: "{{ item.address }}"
+#     state: present
+#   loop: "{{ vms }}"

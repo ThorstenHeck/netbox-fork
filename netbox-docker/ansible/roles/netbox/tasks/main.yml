@@ -1,0 +1,14 @@
+---
+
+- name: cluster
+  tags: cluster
+  include_tasks: cluster.yml
+  # vars:
+  #   netbox_headers: "{{ netbox_headers }}"
+  #   pves: "{{ pves }}"
+  #   vms: "{{ vms }}"
+  #   install_state: "{{ install_state }}"
+
+# - name: init
+#   tags: init
+#   include_tasks: init.yml
