@@ -57,33 +57,21 @@
   with_items:
     -  "{{ vm_object }}"
 
-- name: "TASK 3: SYS >> SETUP SOME VMs"
-  netbox.netbox.netbox_virtual_machine:
-    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
-    netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
-    data:
-      name: "{{ item.name }}"
-      cluster: JoshV_Cluster1
-    state: absent
-  loop: "{{ virtual_machine }}"
-
-- name: "TASK 3: SYS >> SETUP SOME VMs"
-  netbox.netbox.netbox_virtual_machine:
-    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
-    netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
-    data:
-      name: "kkkk"
-      cluster: JoshV_Cluster1
-    state: present
-
 - name: "TASK 4.1: CREATE VIRTUAL MACHINE"
   netbox.netbox.netbox_virtual_machine:
     netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
     netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
     data:
-      name: "ll"
-    state: present
-
+      name: "{{ inventory_hostname }}"
+      site: "{{ site_vm }}"
+      cluster: "{{ cluster_vm }}"
+      tenant: "{{ tenant_vm }}"
+      platform: "{{ ansible_facts['lsb']['description'] }}"
+      virtual_machine_role: "{{ virtual_machine_role }}"
+      vcpus: "{{ ansible_facts['processor_vcpus'] }}"
+      primary_ip4: "{{ ansible_facts['default_ipv4']['address'] }}"
+      memory: "{{ ansible_memtotal_mb }}"
+      disk: "{{ (mount.size_total / 1000000000) | round(1, 'common') }}"
 
 
 
