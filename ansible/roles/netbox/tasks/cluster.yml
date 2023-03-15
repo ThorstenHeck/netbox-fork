@@ -9,58 +9,82 @@
 - set_fact:
     mount: "{{ ansible_mounts | first }}"
 - set_fact:
-    disk_total_s: "{{ (mount.size_total / 1000000000) | round(1, 'common') }}" 
+    disk_total_s:  
 - set_fact:
-    vcpu_cores: "{{ ansible_facts['processor_vcpus'] }}" 
+    vcpu_cores:  
 - set_fact:
     interfaces_list: "{{ ansible_facts | build_ipv4_from_facts }}"
 - set_fact:
-    primary_ip: "{{ ansible_facts['default_ipv4']['address']}}" 
+    primary_ip: 
 - set_fact:
-    platform: "{{ ansible_facts['lsb']['description']}}" 
-- set_fact:
-    name: "{{ inventory_hostname }}" 
+    platform:  
 
-- name: vcpu cores output
+
+
+
+- name: Create dictionary for creating virtual machine object in netbox
+  set_fact: 
+      vm_object: "{{ vm_object | default({}) | combine ({ item.key : item.value }) }}"
+  with_items:
+    - { 'key': 'name' , 'value': "{{ inventory_hostname }}" }
+    - { 'key': 'site' , 'value': "{{ site_vm }}" }
+    - { 'key': 'cluster' , 'value': "{{ cluster_vm }}" }
+    - { 'key': 'tenant' , 'value': "{{ tenant_vm }}" }
+    - { 'key': 'platform' , 'value': "{{ ansible_facts['lsb']['description']}}" }
+    - { 'key': 'virtual_machine_role' , 'value': "{{ virtual_machine_role }}" }
+    - { 'key': 'vcpus' , 'value': "{{ ansible_facts['processor_vcpus'] }}" }
+    - { 'key': 'primary_ip4' , 'value': "{{ ansible_facts['default_ipv4']['address']}}" }
+    - { 'key': 'memory' , 'value': "{{ ansible_memtotal_mb }}" }
+    - { 'key': 'disk' , 'value': "{{ (mount.size_total / 1000000000) | round(1, 'common') }}" }
+
+- name: object output
   debug:
-    msg: " {{ vcpu_cores }}"
+    msg: " {{ vm_object }}"
 
-- name: interfaces_list output
+- name: vm output
   debug:
-    msg: "{{ interfaces_list }}"
+    msg: " {{ virtual_machine }}"
 
-- name: disk total output
+- name: display memory
+  set_fact: 
+      vm_object2: "{{ item.memory }}"
+  with_items:
+    -  "{{ vm_object }}"
+
+- name: display disk
   debug:
-    msg: " {{ disk_total_s }}"
+    msg: "{{ item.disk }}"
+  with_items:
+    -  "{{ vm_object }}"
 
-- name: total memory output
-  debug:
-    msg: " {{ ansible_memtotal_mb }}"
-- name: primary IP output
-  debug:
-    msg: " {{ primary_ip }}"
+- name: "TASK 3: SYS >> SETUP SOME VMs"
+  netbox.netbox.netbox_virtual_machine:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+    data:
+      name: "{{ item.name }}"
+      cluster: JoshV_Cluster1
+    state: absent
+  loop: "{{ virtual_machine }}"
 
-- name: platform output
-  debug:
-    msg: " {{ platform | makedict('platform') }} "
+- name: "TASK 3: SYS >> SETUP SOME VMs"
+  netbox.netbox.netbox_virtual_machine:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+    data:
+      name: "kkkk"
+      cluster: JoshV_Cluster1
+    state: present
 
-- name: name output
-  debug:
-    msg: " {{ inventory_hostname }}"
+- name: "TASK 4.1: CREATE VIRTUAL MACHINE"
+  netbox.netbox.netbox_virtual_machine:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_API_KEY') }}"
+    data:
+      name: "ll"
+    state: present
 
 
-
-
-#       name: "{{ item.name }}"
-#       site: "{{ item.site }}"
-#       cluster: "{{ item.cluster }}"
-#       tenant: "{{ item.tenant }}"
-#       platform: "{{ item.platform }}"
-#       virtual_machine_role: "{{ item.virtual_machine_role }}"
-#       vcpus: "{{ item.vcpus }}"
-#       primary_ip4: "{{ item.primary_ip4 }}"
-#       memory: "{{ item.memory }}"
-#       disk: "{{ item.disk }}"
 
 
 # - name: "TASK 0: CREATE CLUSTER GROUP"
@@ -216,8 +240,8 @@
 #       primary_ip4: "{{ item.primary_ip4 }}"
 #       memory: "{{ item.memory }}"
 #       disk: "{{ item.disk }}"
-#   loop: "{{ virtual_machine }}"
-
+#   with_items:
+#     -  "{{ vm_object }}"
 
 
 

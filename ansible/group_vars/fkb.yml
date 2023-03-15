@@ -1,0 +1,4 @@
+---
+site: "FKB"
+cluster: "Proxmox-FKB"
+tenant: "kubermatic"

@@ -29,7 +29,6 @@ class FilterModule:
             "get_interface_by_bandwidth": FilterModule.get_interface_by_bandwidth,
             "build_ipv4_from_facts": FilterModule.build_ipv4_from_facts,
             "get_interface_id": FilterModule.get_interface_id,
-            "makedict": FilterModule.makedict,
             
         }
 
@@ -292,7 +291,3 @@ class FilterModule:
             return "1000base-t"
 
         return None
-
-
-def makedict(self):
-    return { 'makedict': lambda _val, _list: { k: _val for k in _list }  }

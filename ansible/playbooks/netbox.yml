@@ -1,6 +1,6 @@
 ---
 - name: "PLAY 1: SETUP DEVICES WITHIN NETBOX"
-  hosts: localhost
+  hosts: ffm
   connection: local
   # vars:
   #   install_state: present

@@ -131,12 +131,11 @@ platforms:
   - { name: Rocky 8, slug: rocky8 }
   - { name: Rocky 9, slug: rocky9 }
 
-
 device:
   - { name: "Proxmox-FFM-01", device_type: "PowerEdge R650xs", device_role: "Server", tenant: "3ascloud", platform: "ubuntu2204", site: "FFM", cluster: "Proxmox-FFM"}
   - { name: "Proxmox-FKB-01", device_type: "PowerEdge R650xs", device_role: "Server", tenant: "3ascloud", platform: "ubuntu2204", site: "FKB", cluster: "Proxmox-FKB"}
 
-
+virtual_machine_role: "VM"
 
 virtual_machine:
   - { name: "VM-FFM-01", site: "FFM", cluster: "Proxmox-FFM", virtual_machine_role: "VM", vcpus: "4", tenant: "kubermatic", platform: "ubuntu2204", primary_ip4: "10.0.0.0", memory: "4096", disk: "30"}
@@ -145,6 +144,19 @@ virtual_machine:
   - { name: "VM-FKB-01", site: "FKB", cluster: "Proxmox-FKB", virtual_machine_role: "VM", vcpus: "4", tenant: "kubermatic", platform: "ubuntu2204", primary_ip4: "10.0.0.0", memory: "4096", disk: "30"}
   - { name: "VM-FKB-02", site: "FKB", cluster: "Proxmox-FKB", virtual_machine_role: "VM", vcpus: "4", tenant: "kubermatic", platform: "ubuntu2204", primary_ip4: "10.0.0.0", memory: "4096", disk: "30"}
 
+
+
+
+devices: {}
+cisco:
+- CiscoRouter01
+- CiscoRouter02
+- CiscoRouter03
+- CiscoSwitch01
+arista:
+- AristaSwitch01
+- AristaSwitch02
+- AristaSwitch03
 
   # vars:
   #   install_state: present

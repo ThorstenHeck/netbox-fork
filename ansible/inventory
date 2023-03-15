@@ -1,0 +1,10 @@
+[all]
+netbox  ansible_host=65.21.252.14
+ansible  ansible_host=65.109.167.82
+
+
+[fkb]
+ansible
+
+[ffm]
+localhost   ansible_connection=local
