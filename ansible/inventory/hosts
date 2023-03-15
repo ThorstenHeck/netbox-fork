@@ -1,0 +1,2 @@
+[all]
+netbox  ansible_host=65.21.252.14
