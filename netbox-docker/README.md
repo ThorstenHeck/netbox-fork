@@ -31,8 +31,8 @@ To get _NetBox Docker_ up and running run the following commands.
 There is a more complete [_Getting Started_ guide on our wiki][wiki-getting-started] which explains every step.
 
 ```bash
-git clone -b release https://github.com/netbox-community/netbox-docker.git
-cd netbox-docker
+git clone -b release https://github.com/netbox-community/netbox-fork.git
+cd netbox-fork
 tee docker-compose.override.yml <<EOF
 version: '3.4'
 services:
@@ -42,8 +42,13 @@ services:
     security_opt:
       - seccomp:unconfined
 EOF
-docker-compose pull
-docker-compose up
+docker compose pull
+docker compose up
+```
+
+```bash
+cd ansible
+ansible-playbook -i inventory/hosts playbooks/netbox.yml
 ```
 
 The whole application will be available after a few minutes.
